@@ -1,11 +1,11 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, graphql, StaticQuery } from "gatsby"
 
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 
-const IndexPage = () => (
+const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
     <h1>Hi people</h1>
@@ -15,7 +15,34 @@ const IndexPage = () => (
       <Image />
     </div>
     <Link to="/page-2/">Go to page 2</Link>
+    <h2>Page Query</h2>
+    <pre>{JSON.stringify(data, null, 4)}</pre>
+    <h2>Static Query</h2>
+    <StaticQuery
+      query={graphql`
+        {
+          site {
+            siteMetadata {
+              title
+            }
+          }
+        }
+      `}
+      render={staticData => <pre>{JSON.stringify(staticData, null, 4)}</pre>}
+    />
   </Layout>
 )
 
 export default IndexPage
+
+export const query = graphql`
+  {
+    allFile {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+`
